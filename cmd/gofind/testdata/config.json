@@ -1,0 +1,13 @@
+{
+  "inputDirectory": "./testdata/input",
+  "outputDirectory": "./testdata/output",
+  "fileNamePatterns": {
+    "include": [".*\\.in$"],
+    "exclude": [".*\\.ex$"]
+  }, 
+  "patterns": [{
+    "search": "two",
+    "replace": "TWO"
+  }]
+}
+
