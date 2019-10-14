@@ -12,8 +12,11 @@ import (
 )
 
 func TestParseFlags(t *testing.T) {
-	flag.Set("config", "testdata/config.json")
-	parseFlags()
+	err := flag.Set("config", "testdata/config.json")
+	assert.NoError(t, err)
+
+	err = parseFlags()
+	assert.NoError(t, err)
 
 	assert.Equal(t, "./testdata/output", config.OutputDirectory)
 }
@@ -76,8 +79,11 @@ func assertFilesEqualIgnoreNL(t *testing.T, path1, path2 string) {
 }
 
 func TestSearchReplace(t *testing.T) {
-	flag.Set("config", "testdata/config.yaml")
-	parseFlags()
+	err := flag.Set("config", "testdata/config.yaml")
+	assert.NoError(t, err)
+
+	err = parseFlags()
+	assert.NoError(t, err)
 
 	doFind()
 

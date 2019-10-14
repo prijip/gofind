@@ -47,7 +47,6 @@ func (f *Filter) TestFilters(data []byte) (canSelect, include, exclude bool) {
 			if regEx.Match(data) {
 				exclude = true
 				break
-			} else {
 			}
 		}
 	}
@@ -115,8 +114,12 @@ func FileSearchReplace(inFilePath, outFilePath string, patterns []SearchReplaceP
 	}
 
 	replaced, err := SearchReplace(fileContent, patterns)
+	if err != nil {
+		log.Printf("SearchReplace failed for file %s. err=%v", inFilePath, err)
+		return false, err
+	}
 
-	if bytes.Compare(replaced, fileContent) == 0 {
+	if bytes.Equal(replaced, fileContent) {
 		log.Printf("%s [No Change]", inFilePath)
 		return false, nil
 	}

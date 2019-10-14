@@ -31,7 +31,7 @@ func (opt *StringOption) MarshalJSON() ([]byte, error) {
 }
 
 func (opt *StringOption) UnmarshalJSON(b []byte) error {
-	if b == nil || bytes.Compare(b, []byte("null")) == 0 { // null with no quotes - represents a JSON null
+	if b == nil || bytes.Equal(b, []byte("null")) { // null - represents a JSON null
 		return nil
 	}
 
