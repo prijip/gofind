@@ -70,26 +70,60 @@ func SearchReplace(inData []byte, patterns []SearchReplacePattern) ([]byte, erro
 			continue
 		}
 
-		if patterns[i].Filter != nil {
-			if bPass, _, _ := patterns[i].Filter.TestFilters(replaced); !bPass {
-				continue
-			}
+		// If all occurrences need to be replaced, with no filters to be applied
+		// for each replacement, replace everything in one go
+		if patterns[i].Occurrences < 0 && (patterns[i].Filter == nil || len(patterns[i].Filter.Include)+len(patterns[i].Filter.Exclude) == 0) {
+			replaced = patterns[i].SearchRegex.ReplaceAll(replaced, patterns[i].ReplacePattern)
+			continue
 		}
 
-		if patterns[i].Occurrences < 0 {
-			replaced = patterns[i].SearchRegex.ReplaceAll(replaced, patterns[i].ReplacePattern)
-		} else if patterns[i].Occurrences > 0 {
-			// TODO: Optimize
-			for count := patterns[i].Occurrences; count > 0; count-- {
-				loc := patterns[i].SearchRegex.FindIndex(replaced)
-				if loc == nil { // No match
-					break
-				}
-				s := replaced[loc[0]:loc[1]]
-				r := patterns[i].SearchRegex.ReplaceAll(s, patterns[i].ReplacePattern)
-				replaced = bytes.Replace(replaced, s, r, 1)
+		// TODO: Optimize
+		count := patterns[i].Occurrences
+		var segs [][]byte // Segments of data
+		searchBuf := replaced
+		for {
+			// Loop exit condition on count
+			// If occurrences is provided, use that in the loop exit condition
+			// Otherwise loop until all matches are processed
+			if count == 0 {
+				break
 			}
+			if count > 0 {
+				count--
+			}
+
+			loc := patterns[i].SearchRegex.FindIndex(searchBuf)
+			if loc == nil { // No match
+				break
+			}
+
+			if loc[0] != 0 {
+				seg := searchBuf[0:loc[0]]
+				segs = append(segs, seg)
+			}
+
+			s := searchBuf[loc[0]:loc[1]]
+			if len(s) == 0 { // Some regex trouble, break out anyway
+				log.Print("Warning: RegExp: '", patterns[i].SearchRegex.String(), "' causing ZERO length match; please verify RegExp")
+				break
+			}
+
+			shouldReplace := true
+			if patterns[i].Filter != nil {
+				shouldReplace, _, _ = patterns[i].Filter.TestFilters(s)
+			}
+			r := s
+			if shouldReplace {
+				r = patterns[i].SearchRegex.ReplaceAll(s, patterns[i].ReplacePattern)
+			}
+			segs = append(segs, r)
+			searchBuf = searchBuf[loc[1]:]
 		}
+		if len(searchBuf) > 0 {
+			segs = append(segs, searchBuf)
+		}
+
+		replaced = bytes.Join(segs, []byte{})
 	}
 
 	return replaced, nil

@@ -80,12 +80,14 @@ patterns:
     replace: ONE
 
   # Insert a file header in files that does not already have one
-  - search: ^
+  - search: (?m)^(.+)$
     occurrences: 1
-    replace: |+
+    # Preserve the inline new-lines, strip the last one
+    replace: |-
       // Copyright (C) Foo
       // All rights reserved
-
+      $1
+    # Apply filter on the matched string
     filter:
       include:
       exclude:
