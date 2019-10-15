@@ -51,7 +51,9 @@ var (
 )
 
 func init() {
-	flag.StringVar(&configFileName, "config", "", "Configuration File Name (JSON)")
+	flag.Usage = printUsage
+
+	flag.StringVar(&configFileName, "config", "", "Configuration File Name (JSON/YAML)")
 	flag.StringVar(&searchPattern, "search", "", "Regular expression to search for")
 	flag.Var(&replacePattern, "replace", "String to replace with")
 	flag.StringVar(&searchPattern, "occurrences", "", "Number of occurrences to be replaced. Default is all occurrences")
@@ -61,8 +63,13 @@ func init() {
 }
 
 func printUsage() {
-	log.Print("gofind -search <search-string> [-replace <replace-string> -files <file-name-pattern>] -in-dir <path> -out-dir <path>")
-	log.Print("gofind -config <path/to/config.json>")
+	fmt.Fprintln(flag.CommandLine.Output(),
+		"gofind -search <search-string> -replace <replace-string> -files <file-name-pattern> -in-dir <path> -out-dir <path>")
+	fmt.Fprintln(flag.CommandLine.Output(),
+		"gofind -config <path/to/configfile>")
+	fmt.Fprintln(flag.CommandLine.Output(), "configfile can be in JSON or YAML format")
+
+	flag.PrintDefaults()
 }
 
 func parseFlags() error {

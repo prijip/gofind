@@ -1,27 +1,31 @@
 # Introduction
-A tool to search & replace using multiple patterns in a set of files
+A tool to search & replace using regular expression in a set of files.
 ## Features
-- Configurable input directory
 - Configurable output directory
-- Specify file-name inclusion pattern as regular expression
-- Specify file-name exclusion patterns as regular expression
-- Multiple patterns to be searched for and replaced
+- Select/Filter files by name
+- Select/Filter files by content
+- Conditional replacement - In addition to the search regular expression, additional conditions/filters can be checked on the selected text before replacing it
+- Multiple search replace on a file in one go
+- All filters (file name / content / conditional replacement) support inclusion and exclusion conditions to be specified
 
 # Installation
 
 # Usage
 
-```sh
-gofind -search <search-string> [-replace <replace-string> -files <file-name-pattern>] -in-dir <path> -out-dir <path>
-gofind -config <path/to/config.json>
+```
+gofind -search <search-string> -replace <replace-string> -files <file-name-pattern> -in-dir <path> -out-dir <path>
 
-Where:
- -config string
-        Configuration File Name (JSON)
+gofind -config <path/to/configfile>
+configfile can be in JSON or YAML format
+
+  -config string
+        Configuration File Name (JSON/YAML)
   -files string
         Filename pattern
   -in-dir string
         Input Directory
+  -occurrences string
+        Number of occurrences to be replaced. Default is all occurrences
   -out-dir string
         Output Directory
   -replace value
