@@ -16,6 +16,7 @@ import (
 	"github.com/prijip/gofind"
 )
 
+// FilterOptions to define the search criteria
 type FilterOptions struct {
 	Include []string `json:"include"`
 	Exclude []string `json:"exclude"`
@@ -43,11 +44,18 @@ var (
 	searchPattern  string
 	replacePattern StringOption
 	occurrences    string
+	showVersion    bool
 
 	configFileName         string
 	inputDirectory         string
 	outputDirectory        string
 	fileNameIncludePattern string
+)
+
+// Version and Build Date set externally during linking
+var (
+	Version   = "undefined"
+	BuildDate = "undefined"
 )
 
 func init() {
@@ -60,9 +68,17 @@ func init() {
 	flag.StringVar(&fileNameIncludePattern, "files", "", "Filename pattern")
 	flag.StringVar(&inputDirectory, "in-dir", "", "Input Directory")
 	flag.StringVar(&outputDirectory, "out-dir", "", "Output Directory")
+	flag.BoolVar(&showVersion, "version", false, "Show version and exit")
+}
+
+func printVersion() {
+	fmt.Fprintln(flag.CommandLine.Output(),
+		"gofind version", Version, "build date", BuildDate)
 }
 
 func printUsage() {
+	printVersion()
+
 	fmt.Fprintln(flag.CommandLine.Output(),
 		"gofind -search <search-string> -replace <replace-string> -files <file-name-pattern> -in-dir <path> -out-dir <path>")
 	fmt.Fprintln(flag.CommandLine.Output(),
@@ -124,13 +140,16 @@ func parseFlags() error {
 		config.OutputDirectory = outputDirectory
 	}
 
-	if len(config.Patterns) == 0 || len(config.InputDirectory) == 0 {
-		printUsage()
-		return fmt.Errorf("Incorrect Usage")
-	}
-
 	if len(config.OutputDirectory) == 0 {
 		config.OutputDirectory = config.InputDirectory
+	}
+
+	return nil
+}
+
+func validateFlags() error {
+	if len(config.Patterns) == 0 || len(config.InputDirectory) == 0 {
+		return fmt.Errorf("Incorrect Usage")
 	}
 
 	return nil
@@ -283,6 +302,16 @@ func main() {
 
 	if err := parseFlags(); err != nil {
 		return
+	}
+
+	if showVersion {
+		printVersion()
+		return
+	}
+
+	if err := validateFlags(); err != nil {
+		log.Print(err)
+		printUsage()
 	}
 
 	doFind()
