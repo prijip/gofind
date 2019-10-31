@@ -1,0 +1,11 @@
+branch: semrel
+
+tagFormat: v${version}
+
+plugins:
+  - - "@semantic-release/commit-analyzer"
+    - releaseRules:
+      - type: "fix"
+        release: "prerelease"
+  - - "@semantic-release/exec"
+    - prepareCmd: './gen-build.sh ${nextRelease.version} ${options.branch} ${commits.length} "${(new Date()).toISOString()}"'

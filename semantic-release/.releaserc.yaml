@@ -1,0 +1,6 @@
+branch: master
+
+plugins:
+  - "@semantic-release/commit-analyzer"
+  - - "@semantic-release/exec"
+    - prepareCmd: './gen-build.sh ${nextRelease.version} ${options.branch} ${commits.length} "${(new Date()).toISOString()}"'
