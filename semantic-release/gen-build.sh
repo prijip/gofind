@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Generate Build Script"
+echo "==Generate Build Script=="
 echo "nextRelease.version: $1"
 echo "options.branch: $2"
 echo "commits.length: $3"
