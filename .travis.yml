@@ -41,5 +41,5 @@ jobs:
         - cp ./semantic-release/gen-build.sh ./gen-build.sh
         - chmod a+x ./gen-build.sh
         # Note: Without --branch option builds triggered from tags may not work
-        - npx semantic-release --debug
+        - npx semantic-release@v16.0.0-beta.29 --debug
 
