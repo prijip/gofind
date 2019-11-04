@@ -50,6 +50,7 @@ var (
 	inputDirectory         string
 	outputDirectory        string
 	fileNameIncludePattern string
+	generateConfigFileName string
 )
 
 // Version and Build Date set externally during linking
@@ -68,6 +69,7 @@ func init() {
 	flag.StringVar(&fileNameIncludePattern, "files", "", "Filename pattern")
 	flag.StringVar(&inputDirectory, "in-dir", "", "Input Directory")
 	flag.StringVar(&outputDirectory, "out-dir", "", "Output Directory")
+	flag.StringVar(&generateConfigFileName, "generate-config", "", "Generate sample configuration file")
 	flag.BoolVar(&showVersion, "version", false, "Show version and exit")
 }
 
@@ -79,8 +81,6 @@ func printVersion() {
 func printUsage() {
 	printVersion()
 
-	fmt.Fprintln(flag.CommandLine.Output(),
-		"gofind -search <search-string> -replace <replace-string> -files <file-name-pattern> -in-dir <path> -out-dir <path>")
 	fmt.Fprintln(flag.CommandLine.Output(),
 		"gofind -config <path/to/configfile>")
 	fmt.Fprintln(flag.CommandLine.Output(), "configfile can be in JSON or YAML format")
@@ -303,6 +303,11 @@ func main() {
 
 	if showVersion {
 		printVersion()
+		return
+	}
+
+	if len(generateConfigFileName) > 0 {
+		ioutil.WriteFile(generateConfigFileName, templateConfigData, 0777)
 		return
 	}
 
