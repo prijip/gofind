@@ -297,9 +297,6 @@ func doFind() {
 }
 
 func main() {
-	log.Printf("Starting")
-	defer log.Printf("Ending")
-
 	if err := parseFlags(); err != nil {
 		return
 	}
@@ -313,6 +310,9 @@ func main() {
 		log.Print(err)
 		printUsage()
 	}
+
+	log.Printf("Starting")
+	defer log.Printf("Ending")
 
 	doFind()
 }
