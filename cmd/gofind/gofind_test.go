@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -101,4 +102,41 @@ func TestSearchReplace(t *testing.T) {
 
 		assertFilesEqualIgnoreNL(t, path1, path2)
 	}
+}
+
+// TestGenerateConfigGoResource generates a .go file with the contents of config.yaml
+// This is used in the option -generate-config
+func TestGenerateConfigGoResource(t *testing.T) {
+	const (
+		outFileName    = "configtemplate.go"
+		sourceFileName = "testdata/config.yaml"
+	)
+
+	if _, err := os.Stat(outFileName); !os.IsNotExist(err) {
+		if b, _ := strconv.ParseBool(os.Getenv("GENERATE_CONFIG_TEMPLATE")); !b {
+			t.Skip("GENERATE_CONFIG_TEMPLATE is not set. Skipping template generation.")
+			return
+		}
+	}
+
+	outFile, err := os.Create(outFileName)
+	assert.NoError(t, err)
+
+	inFileData, err := ioutil.ReadFile(sourceFileName)
+	assert.NoError(t, err)
+
+	_, err = outFile.Write([]byte("package main\n"))
+	assert.NoError(t, err)
+
+	_, err = outFile.Write([]byte("// Generated content\n"))
+	assert.NoError(t, err)
+
+	_, err = outFile.Write([]byte("var templateConfigData = []byte(`\n"))
+	assert.NoError(t, err)
+
+	_, err = outFile.Write(inFileData)
+	assert.NoError(t, err)
+
+	_, err = outFile.Write([]byte("`)\n"))
+	assert.NoError(t, err)
 }
