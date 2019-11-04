@@ -15,7 +15,7 @@ plugins:
   - "@semantic-release/release-notes-generator"
   - - "@semantic-release/github"
     - assets:
-      - - path: "$GOPATH/bin/gofind"
-          label: false
+      - path: "$GOPATH/bin/gofind"
+        label: false
   - - "@semantic-release/exec"
     - prepareCmd: './gen-build.sh ${nextRelease.version} ${options.branch} ${commits.length} "${(new Date()).toISOString()}"'
