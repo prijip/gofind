@@ -47,11 +47,9 @@ outputDirectory: ./testdata/output
 # Regular expressions to select the files based on their name
 # Default is to select all files
 #
-# If an 'include' pattern is provided, a file is selected only if
-# any one of thepatterns match
+# If an 'include' pattern is provided, a file is selected only if one of the patterns match
 #
-# If an 'exclude' pattern is provided, a file is ignored if
-# any one of the patterns patch
+# If an 'exclude' pattern is provided, a file is ignored if one of the patterns match
 #
 # If a file matches both 'exclude' and 'include' patterns,
 # 'exclude' takes priority and the file will be ignored
@@ -64,11 +62,9 @@ fileNamePatterns:
 # Regular expressions to select the files based on their content
 # Default is to select all files
 #
-# If an 'include' pattern is provided, a file is selected only if
-# any one of thepatterns match
+# If an 'include' pattern is provided, a file is selected only if one of the patterns match
 #
-# If an 'exclude' pattern is provided, a file is ignored if
-# any one of the patterns patch
+# If an 'exclude' pattern is provided, a file is ignored if one of the patterns match
 #
 # If a file matches both 'exclude' and 'include' patterns,
 # 'exclude' takes priority and the file will be ignored
@@ -86,7 +82,7 @@ patterns:
   # Insert a file header in files that does not already have one
   - search: (?m)^(.+)$
     occurrences: 1
-    # Preserve the inline new-lines, strip the last one
+    # "|-" is used below to preserve the inline new-lines, strip the last one
     replace: |-
       // Copyright (C) Foo
       // All rights reserved
