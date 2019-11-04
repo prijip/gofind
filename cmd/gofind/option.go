@@ -6,7 +6,7 @@ import (
 )
 
 // StringOption represents an optional string
-// This helps distringuish between an empty string vs unconfigured value
+// This helps distringuish between an empty string provided by the user vs unconfigured value
 type StringOption struct {
 	valid bool
 	value string
@@ -23,6 +23,8 @@ func (opt *StringOption) Set(val string) error {
 	return nil
 }
 
+// MarshalJSON writes the JSON representation for a StringOption
+// It writes "null" for unconfigured value
 func (opt *StringOption) MarshalJSON() ([]byte, error) {
 	if !opt.valid {
 		return json.Marshal(nil)
@@ -43,6 +45,7 @@ func (opt *StringOption) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// IsValid returns true if an option was provided
 func (opt *StringOption) IsValid() bool {
 	return opt.valid
 }

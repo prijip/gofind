@@ -13,15 +13,14 @@ A tool to search & replace using regular expression in a set of files.
 # Usage
 
 ```
-gofind -search <search-string> -replace <replace-string> -files <file-name-pattern> -in-dir <path> -out-dir <path>
-
 gofind -config <path/to/configfile>
 configfile can be in JSON or YAML format
-
   -config string
         Configuration File Name (JSON/YAML)
   -files string
         Filename pattern
+  -generate-config string
+        Generate sample configuration file
   -in-dir string
         Input Directory
   -occurrences string
@@ -32,6 +31,8 @@ configfile can be in JSON or YAML format
         String to replace with
   -search string
         Regular expression to search for
+  -version
+        Show version and exit
 ```
 # Sample Configuration
 A sample YAML configuration file:
@@ -47,11 +48,9 @@ outputDirectory: ./testdata/output
 # Regular expressions to select the files based on their name
 # Default is to select all files
 #
-# If an 'include' pattern is provided, a file is selected only if
-# any one of thepatterns match
+# If an 'include' pattern is provided, a file is selected only if one of the patterns match
 #
-# If an 'exclude' pattern is provided, a file is ignored if
-# any one of the patterns patch
+# If an 'exclude' pattern is provided, a file is ignored if one of the patterns match
 #
 # If a file matches both 'exclude' and 'include' patterns,
 # 'exclude' takes priority and the file will be ignored
@@ -64,11 +63,9 @@ fileNamePatterns:
 # Regular expressions to select the files based on their content
 # Default is to select all files
 #
-# If an 'include' pattern is provided, a file is selected only if
-# any one of thepatterns match
+# If an 'include' pattern is provided, a file is selected only if one of the patterns match
 #
-# If an 'exclude' pattern is provided, a file is ignored if
-# any one of the patterns patch
+# If an 'exclude' pattern is provided, a file is ignored if one of the patterns match
 #
 # If a file matches both 'exclude' and 'include' patterns,
 # 'exclude' takes priority and the file will be ignored
@@ -86,7 +83,7 @@ patterns:
   # Insert a file header in files that does not already have one
   - search: (?m)^(.+)$
     occurrences: 1
-    # Preserve the inline new-lines, strip the last one
+    # "|-" is used below to preserve the inline new-lines, strip the last one
     replace: |-
       // Copyright (C) Foo
       // All rights reserved

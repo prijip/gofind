@@ -2,20 +2,44 @@ language: go
 
 go:
 - "1.13"
-- "1.12"
+# - "1.12" # 
 
 # Only clone the most recent commit.
 git:
   depth: 1
 
+env:
+  secure: f9qRNbWOX/4dz/UcjfvuTF0Kb4PU/QpxctTK16GcDWFIMIC0Opi55b5C5lzYpgyslrblE7rBbWd4QeQVbrcWO9iWWnpqfZ1767eHu28qZn3wlGAi0zqFKC0rdIaUHMX09M0yQdM3eciF4zVd3RURqg5LWaZmiR2tk5TB2tN0LcnCTIAriuxfit8U2kfaLplK5TMaWF9K9pb0QmOpKEOOpXzXjzK+/m9h6uhUuzXzWKNiTfRe/bhAv7ixgLJz/qMddPhPJIn/i14o3ejZEgOdGfTaaNdBMN0guZADEui91mRVCykQNW+jKjTe6123OvH1cT4RQEs8taBil7o4Z7bXW3C6LW4zqgtmP1OC295lVRZonRmu2LFZnpHBt3ddn7t7ssaZdSj/5EYP6UIi6I9n8b/3mKiDSiAUVACnMyAep8Lxdw7c5iUQX5EXnPPwm4ZMyKis+9s4xYRSnrV5LnghYpN0Y1EHF3XY8E6rgL59hsZAk3cy1scRPrW3XZCR2tmTRDBOeWS+CoI1konkcacNjVPPE3tVcqXwcFjNu1KwifysbQjK9rvem8JrHaPPz5RVo1amNqhRhjhzzh3pTPM6HYMvhf6GreYI7lsVCC7r1rdBP2F9O2GzwQcaFJ+N7VmdE8T8g67jMcRJpoBLoTODgT8ejeWt0IfetFB+Sml+oyA=
+
 jobs:
   include:
-    - stage: source check
-
+    - stage: lint
       install:
         - GO111MODULE=off go get gopkg.in/golangci/golangci-lint.v1/cmd/golangci-lint
-
       script:
         - go build ./...
         - golangci-lint run # run a bunch of code checkers/linters in parallel
+
+    - stage: unit-test
+      script:
         - go test -v -race ./...  # Run all the tests with the race detector enabled
+
+    # Define the release stage that runs semantic-release
+    - stage: release
+      # Advanced: optionally overwrite your default `script` step to skip the tests
+      # script:
+      #   - make
+      script:
+        - nvm install lts/*
+        - npm install @semantic-release/exec -D
+        - |
+          if [[ -f ./semantic-release/$TRAVIS_BRANCH.releaserc.yaml ]]; then
+            cp ./semantic-release/$TRAVIS_BRANCH.releaserc.yaml ./.releaserc.yaml
+          else
+            cp ./semantic-release/.releaserc.yaml ./.releaserc.yaml
+          fi
+        - cp ./semantic-release/gen-build.sh ./gen-build.sh
+        - chmod a+x ./gen-build.sh
+        # Note: Without --branch option builds triggered from tags may not work
+        - npx semantic-release@v16.0.0-beta.29 --debug
+
