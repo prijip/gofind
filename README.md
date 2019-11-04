@@ -13,15 +13,14 @@ A tool to search & replace using regular expression in a set of files.
 # Usage
 
 ```
-gofind -search <search-string> -replace <replace-string> -files <file-name-pattern> -in-dir <path> -out-dir <path>
-
 gofind -config <path/to/configfile>
 configfile can be in JSON or YAML format
-
   -config string
         Configuration File Name (JSON/YAML)
   -files string
         Filename pattern
+  -generate-config string
+        Generate sample configuration file
   -in-dir string
         Input Directory
   -occurrences string
@@ -32,6 +31,8 @@ configfile can be in JSON or YAML format
         String to replace with
   -search string
         Regular expression to search for
+  -version
+        Show version and exit
 ```
 # Sample Configuration
 A sample YAML configuration file:
