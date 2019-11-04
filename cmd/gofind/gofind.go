@@ -307,7 +307,9 @@ func main() {
 	}
 
 	if len(generateConfigFileName) > 0 {
-		ioutil.WriteFile(generateConfigFileName, templateConfigData, 0777)
+		if err := ioutil.WriteFile(generateConfigFileName, templateConfigData, 0777); err != nil {
+			log.Print("Error writing", generateConfigFileName, ", err=", err)
+		}
 		return
 	}
 

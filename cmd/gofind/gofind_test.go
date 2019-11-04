@@ -138,4 +138,5 @@ func TestGenerateConfigGoResource(t *testing.T) {
 	assert.NoError(t, err)
 
 	_, err = outFile.Write([]byte("`)\n"))
+	assert.NoError(t, err)
 }
