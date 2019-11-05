@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/prijip/gofind.svg?branch=master)](https://travis-ci.org/prijip/gofind)
 # Introduction
 A tool to search & replace using regular expression in a set of files.
 ## Features
