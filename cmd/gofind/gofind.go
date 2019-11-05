@@ -65,7 +65,7 @@ func init() {
 	flag.StringVar(&configFileName, "config", "", "Configuration File Name (JSON/YAML)")
 	flag.StringVar(&searchPattern, "search", "", "Regular expression to search for")
 	flag.Var(&replacePattern, "replace", "String to replace with")
-	flag.StringVar(&searchPattern, "occurrences", "", "Number of occurrences to be replaced. Default is all occurrences")
+	flag.StringVar(&occurrences, "occurrences", "", "Number of occurrences to be replaced. Default is all occurrences")
 	flag.StringVar(&fileNameIncludePattern, "files", "", "Filename pattern")
 	flag.StringVar(&inputDirectory, "in-dir", "", "Input Directory")
 	flag.StringVar(&outputDirectory, "out-dir", "", "Output Directory")
@@ -82,9 +82,17 @@ func printUsage() {
 	printVersion()
 
 	fmt.Fprintln(flag.CommandLine.Output(),
-		"gofind -config <path/to/configfile>")
+		"gofind -config <path/to/configfile> [over-ride options]")
 	fmt.Fprintln(flag.CommandLine.Output(), "configfile can be in JSON or YAML format")
 
+	fmt.Fprintln(flag.CommandLine.Output(), "")
+
+	fmt.Fprintln(flag.CommandLine.Output(),
+		"Search/Replace command line option will be combined with the search/replace patterns loaded from the configuration file")
+	fmt.Fprintln(flag.CommandLine.Output(),
+		"Other options provided in command line will override the options from configuration file")
+
+	fmt.Fprintln(flag.CommandLine.Output(), "")
 	flag.PrintDefaults()
 }
 
