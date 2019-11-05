@@ -33,6 +33,7 @@ jobs:
         - nvm install lts/*
         - npm install @semantic-release/exec -D
         - npm install @semantic-release/changelog -D
+        - npm install @semantic-release/git -D
         - |
           if [[ -f ./semantic-release/$TRAVIS_BRANCH.releaserc.yaml ]]; then
             cp ./semantic-release/$TRAVIS_BRANCH.releaserc.yaml ./.releaserc.yaml
