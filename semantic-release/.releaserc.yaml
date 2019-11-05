@@ -15,13 +15,13 @@ plugins:
     #  - type: "fix"
     #    release: "prerelease"
   - - "@semantic-release/exec"
-    - prepareCmd: './gen-build.sh ${nextRelease.version} ${options.branch} ${commits.length} "${(new Date()).toISOString()}"'
+    - prepareCmd: './gen-build.sh "${nextRelease.version}" "${options.branch}" "${commits.length}" "${(new Date()).toISOString()}"'
   - "@semantic-release/release-notes-generator"
   - - "@semantic-release/changelog"
     - changelogFile: docs/CHANGELOG.md
   - - "@semantic-release/git"
     - assets:
-      - "$GOPATH/bin/gofind"
+      - "../../../bin/gofind"
       - "docs/CHANGELOG.md"
   - - "@semantic-release/github"
     - assets:
