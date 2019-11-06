@@ -32,6 +32,8 @@ jobs:
       script:
         - nvm install lts/*
         - npm install @semantic-release/exec -D
+        - npm install @semantic-release/changelog -D
+        - npm install @semantic-release/git -D
         - |
           if [[ -f ./semantic-release/$TRAVIS_BRANCH.releaserc.yaml ]]; then
             cp ./semantic-release/$TRAVIS_BRANCH.releaserc.yaml ./.releaserc.yaml
@@ -41,5 +43,4 @@ jobs:
         - cp ./semantic-release/gen-build.sh ./gen-build.sh
         - chmod a+x ./gen-build.sh
         # Note: Without --branch option builds triggered from tags may not work
-        - npx semantic-release@v16.0.0-beta.29 --debug
-
+        - npx semantic-release@v16.0.0-beta.29 --branch=$TRAVIS_BRANCH --debug
