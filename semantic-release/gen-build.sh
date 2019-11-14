@@ -12,4 +12,4 @@ gofind --version
 
 docker build -t gofind:latest -f ./semantic-release/Dockerfile $GOPATH/bin
 
-docker run -ti gofind:latest
+docker run -a stderr -a stdout gofind:latest
