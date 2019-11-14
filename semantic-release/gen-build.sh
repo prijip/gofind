@@ -9,3 +9,7 @@ echo "build-date: $4"
 go install -ldflags "-X main.Version=$1 -X main.BuildDate=$4" github.com/prijip/gofind/cmd/gofind
 
 gofind --version
+
+docker build -t gofind:latest -f ./Dockerfile $GOPATH/bin
+
+docker run -ti gofind:latest

@@ -29,6 +29,9 @@ jobs:
       # Advanced: optionally overwrite your default `script` step to skip the tests
       # script:
       #   - make
+      services:
+        - docker
+        
       script:
         - nvm install lts/*
         - npm install @semantic-release/exec -D

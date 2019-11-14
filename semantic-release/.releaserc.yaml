@@ -4,8 +4,8 @@ branches:
   - master
   - name: develop
     prerelease: dev
-  - name: automate-changelog
-    prerelease: automate-changelog
+  - name: docker-image
+    prerelease: docker-image
 
 tagFormat: v${version}
 
